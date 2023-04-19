@@ -4,20 +4,20 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app, support_credentials=True)
 
-members = []
+messages = []
 
 @app.route("/members")
 @cross_origin(supports_credentials=True)
 def members():
-    return {"members": members}
+    return jsonify({"members": messages})
 
 @app.route('/save-data', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def save_data():
-    global members
+    global messages
     data = request.json
     print('Data received:', data)
-    members = data['messages']
+    messages = data['messages']
     return jsonify({'message': 'Data saved successfully'})
 
 

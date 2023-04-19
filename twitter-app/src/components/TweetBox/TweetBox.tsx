@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import TweetComponent from '../Tweet/TweetComponent';
 import axios from 'axios';
 
@@ -18,14 +18,18 @@ const TweetBox =(props: { color: string; }) => {
   const onTweetClick = () => {
      setMessages(oldMessages => [...oldMessages , inputMessage])
      }
-  
-  const handleSubmit = async (event: { preventDefault: () => void; }) => {
-    event.preventDefault();
-    const data = { messages };
-    const response = await axios.post('http://localhost:5000/save-data', data);
-    console.log(response.data);
+
+  useEffect(() => {
+    const sendingData = async () => {  
+        const data = { messages };
+        const response = await axios.post('http://localhost:5000/save-data', data);
+        console.log(response.data);}
+    sendingData()
+          .catch(console.error);
+}, [messages]);
     
-  }
+  
+
   
   
   return (
