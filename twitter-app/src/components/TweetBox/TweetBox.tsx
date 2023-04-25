@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react';
 import TweetComponent from '../Tweet/TweetComponent';
 import axios from 'axios';
 
-const TweetBox =(props: { color: string; }) => {
+  const TweetBox =(props: { color: string; }) => {
   const [messages, setMessages] = useState<string[]>([]);
   
   const [inputMessage, setinputMessage] = useState('');
@@ -18,40 +18,50 @@ const TweetBox =(props: { color: string; }) => {
      event.preventDefault()
      
      } 
-     const onFormClick = (event: React. MouseEvent<HTMLElement>) => {
-      setMessages(oldMessages => [...oldMessages , inputMessage])
+  const onFormClick = (event: React. MouseEvent<HTMLElement>) => {
+  setMessages(oldMessages => [...oldMessages , inputMessage])
       
       
       } 
        
       
+
+
+    useEffect(() => {
+      const receivingData = async () => {  
+        const response = await axios.get('http://localhost:5000/members');
+        console.log(response.data);
+          setMessages(oldMessages => [...oldMessages , ...response.data.members])
+      }
+        
+          receivingData()
+          .catch(console.error);
+        }, []);
+          
+          
+          
+    
   
-
-  const getoldMsgs = () => {
-    axios({
-      url: 'localhost:5000/members',
-      // configuration
-  })
-  .then(response => {
-      return messages
-
-  })
-
-  }
  
   useEffect(() => {
     const sendingData = async () => {  
         const data = { messages };
         const response = await axios.post('http://localhost:5000/save-data', data);
-        console.log(response.data);}
+        console.log(response.data);
+      }
     sendingData()
           .catch(console.error);
 }, [messages]);
+
+
+
     
   
 
   
   
+    
+
   return (
     <div  >
         <div>
@@ -72,6 +82,7 @@ const TweetBox =(props: { color: string; }) => {
         
       <br></br>
       
+     
      {messages.map(tweet => <TweetComponent TweetMessage={tweet}/>) }
      
      <br></br>
